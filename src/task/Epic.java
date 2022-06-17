@@ -23,11 +23,9 @@ public class Epic extends Task {
     public String toString() {
         return "Эпик{" +
                 "№=" + id +
-                ", Название='" + title + '\'' +
-                ", Описание='" + description + '\'' +
-                ", Статус='" + status + '\'' +
-                '}';
+                ", Название='" + title +
+                "', Описание='" + description +
+                "', Статус='" + status +
+                "'}";
     }
-
-
 }

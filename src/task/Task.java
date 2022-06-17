@@ -47,11 +47,11 @@ public class Task {
 
     @Override
     public String toString() {
-        return "ЗАДАЧА{" +
-                "№=" + id +
-                ", Название='" + title + '\'' +
-                ", Описание='" + description + '\'' +
-                ", Статус='" + status + '\'' +
-                '}';
+        return "ЗАДАЧА" +
+                "{№=" + id +
+                ", Название='" + title +
+                "', Описание='" + description +
+                "', Статус='" + status +
+                "'}";
     }
 }

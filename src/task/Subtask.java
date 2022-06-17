@@ -5,7 +5,6 @@ public class Subtask extends Task {
     // Поменял на ID. А если в следующем ТЗ мне от эпика понадобится извлечь что-то иное, кроме АйДи то нужно будет
     // возвращаться обратно к объекту эпик?
 
-
     public Subtask(String title, String description, String status) {
         super(title, description, status);
     }
@@ -27,9 +26,9 @@ public class Subtask extends Task {
     public String toString() {
         return "Подзадача{" +
                 "№=" + id +
-                ", Название='" + title + '\'' +
-                ", Описание='" + description + '\'' +
-                ", Статус='" + status + '\'' +
-                '}';
+                ", Название='" + title +
+                "', Описание='" + description +
+                "', Статус='" + status +
+                "'}";
     }
 }

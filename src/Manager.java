@@ -7,13 +7,17 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Manager { // класс для объекта менеджер
-    private int id; //хранение задач для Задач, Подзадач и Эпиков:
+    private int idT;
+    private int idS;
+    private int idE; //хранение задач для Задач, Подзадач и Эпиков:
     private HashMap<Integer, Task> tasks;
     private HashMap<Integer, Subtask> subtasks;
     private HashMap<Integer, Epic> epics;
 
     public Manager() {
-        id = 0;
+        idT = 0;
+        idS = 0;
+        idE = 0;
         tasks = new HashMap<>();
         subtasks = new HashMap<>();
         epics = new HashMap<>();
@@ -21,8 +25,8 @@ public class Manager { // класс для объекта менеджер
 
     //Задачи: добавляем task
     public void addTask(Task task) {
-        task.setId(++id);
-        tasks.put(id, task);
+        task.setId(++idT);
+        tasks.put(idT, task);
     }
 
     // храним task
@@ -50,11 +54,11 @@ public class Manager { // класс для объекта менеджер
         tasks.clear();
     }
 
-    //Эпики пошли
+    //Аналогично для Эпиков
     public void addEpic(Epic epic) {
-        epic.setId(++id);
+        epic.setId(++idS);
         epic.setStatus("NEW");
-        epics.put(id, epic);
+        epics.put(idS, epic);
     }
 
     public void updateEpic(Epic epic) {
@@ -89,9 +93,9 @@ public class Manager { // класс для объекта менеджер
 
     //Аналогично для подзадач
     public void addSubtask(Subtask subtask) {
-        subtask.setId(++id);
-        subtasks.put(id, subtask);
-        subtask.getEpic().getEpicSubtasks().add(id);
+        subtask.setId(++idE);
+        subtasks.put(idE, subtask);
+        subtask.getEpic().getEpicSubtasks().add(idE);
         checkEpicStatus(subtask.getEpic());
     }
 
@@ -133,7 +137,6 @@ public class Manager { // класс для объекта менеджер
 
     // статусы эпиков
     private void checkEpicStatus(Epic epic) {
-
         if (epic.getEpicSubtasks().size() == 0) {
             epic.setStatus("NEW");
             return;
