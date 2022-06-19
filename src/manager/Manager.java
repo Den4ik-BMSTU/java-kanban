@@ -1,4 +1,7 @@
-import task.Epic;
+package manager; //так, критические замечания исправил, остальные потихоньку на неделе изучу, сейчас просто загородом
+                //спасибо за проверку, ты хорошие комментарии с ссылками оставляешь
+
+import task.Epic; //добавил на 106 строке кода
 import task.Subtask;
 import task.Task;
 
@@ -6,18 +9,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class Manager { // класс для объекта менеджер
-    private int idT;
-    private int idS;
-    private int idE; //хранение задач для Задач, Подзадач и Эпиков:
+public class Manager { // класс для объекта менеджер, //упаковал
+    private int id; //хранение задач для Задач, Подзадач и Эпиков:, переделал
     private HashMap<Integer, Task> tasks;
     private HashMap<Integer, Subtask> subtasks;
     private HashMap<Integer, Epic> epics;
 
     public Manager() {
-        idT = 0;
-        idS = 0;
-        idE = 0;
+        id = 0;
         tasks = new HashMap<>();
         subtasks = new HashMap<>();
         epics = new HashMap<>();
@@ -25,8 +24,8 @@ public class Manager { // класс для объекта менеджер
 
     //Задачи: добавляем task
     public void addTask(Task task) {
-        task.setId(++idT);
-        tasks.put(idT, task);
+        task.setId(++id);
+        tasks.put(id, task);
     }
 
     // храним task
@@ -45,9 +44,7 @@ public class Manager { // класс для объекта менеджер
 
     // метод для удаления
     public void deleteTask(int id) {
-        if (tasks.containsKey(id)) {
-            tasks.remove(id);
-        }
+        tasks.remove(id);
     }
 
     public void deleteAllTasks() {
@@ -56,13 +53,13 @@ public class Manager { // класс для объекта менеджер
 
     //Аналогично для Эпиков
     public void addEpic(Epic epic) {
-        epic.setId(++idS);
+        epic.setId(++id);
         epic.setStatus("NEW");
-        epics.put(idS, epic);
+        epics.put(id, epic);
     }
 
     public void updateEpic(Epic epic) {
-        epic.setEpicSubtasks(epics.get(epic.getId()).getEpicSubtasks());
+        epic.setIdSubTasks(epics.get(epic.getId()).getIdSubTasks());
         epics.put(epic.getId(), epic);
         checkEpicStatus(epic);
     }
@@ -79,10 +76,10 @@ public class Manager { // класс для объекта менеджер
         if (epics.containsKey(id)) {
             Epic epic = epics.get(id);
             epics.remove(id);
-            for (Integer subtaskId : epic.getEpicSubtasks()) {
+            for (Integer subtaskId : epic.getIdSubTasks()) {
                 subtasks.remove(subtaskId);
             }
-            epic.setEpicSubtasks(new ArrayList<>());
+            epic.setIdSubTasks(new ArrayList<>());
         }
     }
 
@@ -93,9 +90,9 @@ public class Manager { // класс для объекта менеджер
 
     //Аналогично для подзадач
     public void addSubtask(Subtask subtask) {
-        subtask.setId(++idE);
-        subtasks.put(idE, subtask);
-        subtask.getEpic().getEpicSubtasks().add(idE);
+        subtask.setId(++id);
+        subtasks.put(id, subtask);
+        subtask.getEpic().getIdSubTasks().add(id);
         checkEpicStatus(subtask.getEpic());
     }
 
@@ -108,6 +105,10 @@ public class Manager { // класс для объекта менеджер
         return subtasks.getOrDefault(id, null);
     }
 
+    public ArrayList<Integer> getSubTaskList(int epicId) {    //Нахождение по id Epic'а всех id subTask'ов
+        return getEpic(epicId).getIdSubTasks();
+    }
+
     public HashMap<Integer, Subtask> getSubtasks() {
         return subtasks;
     }
@@ -115,7 +116,7 @@ public class Manager { // класс для объекта менеджер
     public void deleteSubtask(int id) {
         if (subtasks.containsKey(id)) {
             Epic epic = subtasks.get(id).getEpic();
-            epic.getEpicSubtasks().remove((Integer) id);
+            epic.getIdSubTasks().remove((Integer) id);
             checkEpicStatus(epic);
             subtasks.remove(id);
         }
@@ -124,7 +125,7 @@ public class Manager { // класс для объекта менеджер
     public void deleteAllSubtask() {
         ArrayList<Epic> epicsForStatusUpdate = new ArrayList<>();
         for (Subtask subtask : subtasks.values()) {
-            subtask.getEpic().setEpicSubtasks(new ArrayList<>());
+            subtask.getEpic().setIdSubTasks(new ArrayList<>());
             if (!epicsForStatusUpdate.contains(subtask.getEpic())) {
                 epicsForStatusUpdate.add(subtask.getEpic());
             }
@@ -137,27 +138,27 @@ public class Manager { // класс для объекта менеджер
 
     // статусы эпиков
     private void checkEpicStatus(Epic epic) {
-        if (epic.getEpicSubtasks().size() == 0) {
+        if (epic.getIdSubTasks().size() == 0) {
             epic.setStatus("NEW");
             return;
         }
 
-        boolean allTaskIsNew = true;
-        boolean allTaskIsDone = true;
+        boolean doesAllTaskIsNew = true; //есть ли какое-то правило по написанию is/has/does
+        boolean doesAllTaskIsDone = true;
 
-        for (Integer epicSubtaskId : epic.getEpicSubtasks()) {
+        for (Integer epicSubtaskId : epic.getIdSubTasks()) {
             String status = subtasks.get(epicSubtaskId).getStatus();
             if (!status.equals("NEW")) {
-                allTaskIsNew = false;
+                doesAllTaskIsNew = false;
             }
             if (!status.equals("DONE")) {
-                allTaskIsDone = false;
+                doesAllTaskIsDone = false;
             }
         }
 
-        if (allTaskIsDone) {
+        if (doesAllTaskIsDone) {
             epic.setStatus("DONE");
-        } else if (allTaskIsNew) {
+        } else if (doesAllTaskIsNew) {
             epic.setStatus("NEW");
         } else {
             epic.setStatus("IN_PROGRESS");
