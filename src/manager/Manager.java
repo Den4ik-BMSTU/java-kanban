@@ -1,7 +1,6 @@
-package manager; //так, критические замечания исправил, остальные потихоньку на неделе изучу, сейчас просто загородом
-                //спасибо за проверку, ты хорошие комментарии с ссылками оставляешь
+package manager;
 
-import task.Epic; //добавил на 106 строке кода
+import task.Epic;
 import task.Subtask;
 import task.Task;
 
@@ -9,8 +8,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class Manager { // класс для объекта менеджер, //упаковал
-    private int id; //хранение задач для Задач, Подзадач и Эпиков:, переделал
+public class Manager { // класс для объекта менеджер
+    private int id; //хранение задач для Задач, Подзадач и Эпиков:
     private HashMap<Integer, Task> tasks;
     private HashMap<Integer, Subtask> subtasks;
     private HashMap<Integer, Epic> epics;
@@ -105,8 +104,14 @@ public class Manager { // класс для объекта менеджер, //�
         return subtasks.getOrDefault(id, null);
     }
 
-    public ArrayList<Integer> getSubTaskList(int epicId) {    //Нахождение по id Epic'а всех id subTask'ов
-        return getEpic(epicId).getIdSubTasks();
+    public ArrayList<Subtask> getSubTaskList(int epicId) {//Нахождение по id Epic'а всех subTask'ов
+        ArrayList<Integer> subTaskFromEpic = getEpic(epicId).getIdSubTasks(); // stream() с наскока не получился(
+        // но тема понравилась, буду изучать если получится, то к следующему спринту реализую
+        ArrayList<Subtask> subTaskArrayList = new ArrayList<>();
+        for (Integer integer : subTaskFromEpic) {
+            subTaskArrayList.add(subTaskArrayList.get(integer));
+        }
+        return subTaskArrayList;
     }
 
     public HashMap<Integer, Subtask> getSubtasks() {
@@ -143,22 +148,22 @@ public class Manager { // класс для объекта менеджер, //�
             return;
         }
 
-        boolean doesAllTaskIsNew = true; //есть ли какое-то правило по написанию is/has/does
-        boolean doesAllTaskIsDone = true;
+        boolean isAllTaskIsNew = true; //есть ли какое-то правило по написанию is/has/does
+        boolean isAllTaskIsDone = true;
 
         for (Integer epicSubtaskId : epic.getIdSubTasks()) {
             String status = subtasks.get(epicSubtaskId).getStatus();
             if (!status.equals("NEW")) {
-                doesAllTaskIsNew = false;
+                isAllTaskIsNew = false;
             }
             if (!status.equals("DONE")) {
-                doesAllTaskIsDone = false;
+                isAllTaskIsDone = false;
             }
         }
 
-        if (doesAllTaskIsDone) {
+        if (isAllTaskIsDone) {
             epic.setStatus("DONE");
-        } else if (doesAllTaskIsNew) {
+        } else if (isAllTaskIsNew) {
             epic.setStatus("NEW");
         } else {
             epic.setStatus("IN_PROGRESS");
