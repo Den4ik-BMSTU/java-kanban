@@ -1,57 +1,76 @@
 package task;
 
+import java.util.Objects;
+
 public class Task {
     protected int id;
-    protected String title;
-    protected String description;
-    protected String status;
+    protected String name;
+    protected TaskStatus status;
+    protected String desription;
 
-    public String getTitle() {
-        return title;
+    public Task (String name, TaskStatus status, String desription){
+        this.name=name;
+        this.status=status;
+        this.desription=desription;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    //Set-еры
+    public void setId(int id){
+        this.id=id;
     }
 
-    public String getDescription() {
-        return description;
+    public void setName(String name){
+        this.name=name;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setStatus(TaskStatus status){
+        this.status=status;
     }
 
-
-    public Task(String title, String description, String status) {
-        this.title = title;
-        this.description = description;
-        this.status = status;
+    public void setDesription(String desription){
+        this.desription=desription;
     }
 
-    public int getId() {
+    //Get-еры
+    public int getId(){
         return id;
     }
 
-    public String getStatus() {
+    public String getName(){
+        return name;
+    }
+
+    public TaskStatus getStatus(){
         return status;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public String getDesription(){
+        return desription;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    //Переопределения
 
     @Override
     public String toString() {
-        return "ЗАДАЧА" +
-                "{№=" + id +
-                ", Название='" + title +
-                "', Описание='" + description +
-                "', Статус='" + status +
-                "'}";
+        return "Task{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", status=" + status +
+                ", desription='" + desription + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Task task = (Task) o;
+        return id == task.id && Objects.equals(name, task.name) && Objects.equals(status, task.status)
+                && Objects.equals(desription, task.desription);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, status, desription);
     }
 }
