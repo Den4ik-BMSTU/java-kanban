@@ -41,7 +41,7 @@ public interface TaskManager {
     //SubTasks
     void addSubTask(SubTask subTask); //добавление подзадачи
 
-    ArrayList<SubTask> getSubTask(int epicId); //получение списка подзадач по эпику
+    Collection<SubTask> getSubTask(int epicId); //получение списка подзадач по эпику
 
     Collection<SubTask> getAllSubTaks(); //получение всех подзадач
 
