@@ -97,7 +97,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void deleteEpicById(int epicId) { //ты имел ввиду вот так, покороче код сделать?
-        Epic epic = epics.get(epicId);
+        Epic epic = epics.remove(epicId);
         for (Integer subTaskIds : epic.getSubTaskIDs()){
             subTasks.remove(subTaskIds);
         }
@@ -162,15 +162,9 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void updateSubtask(SubTask subTask) {
-        int idUpdateSubtask = 0;
-        for (Map.Entry<Integer, SubTask> entry : subTasks.entrySet()) {
-            if (Objects.equals(entry.getValue().getName(), subTask.getName()))
-                idUpdateSubtask = entry.getValue().getId();
-        }
-        if (idUpdateSubtask > 0) {
-            subTask.setId(idUpdateSubtask);
-            subTasks.put(idUpdateSubtask, subTask);
+    public void updateSubtask(SubTask subTask) { //переделал по id
+        if (subTasks.containsKey(subTask.getId())) {
+            subTasks.put(subTask.getId(), subTask);
             this.setEpicStatus(epics.get(subTask.getEpicId()));
         }
     }
@@ -180,12 +174,12 @@ public class InMemoryTaskManager implements TaskManager {
         return historyManager.getHistory();
     }
 
-    private void setEpicStatus(Epic epic) { //перенёс
+    private void setEpicStatus(Epic epic) { //понял, переделаю)
         ArrayList<SubTask> subTasksUpd = new ArrayList<>();
         for (int i = 0; i < epic.getSubTaskIDs().size(); i++) {
             subTasksUpd.add(subTasks.get(epic.getSubTaskIDs().get(i)));
         }
-        Stream subTaskStreamNew = subTasksUpd.stream(); //ошибку не выдаёт
+        Stream subTaskStreamNew = subTasksUpd.stream();
         Stream subTaskStreamDone = subTasksUpd.stream();
         if (subTaskStreamNew.allMatch(x->x=="NEW") || (subTasksUpd.size() == 0)){
             epic.setStatus(TaskStatus.NEW);
