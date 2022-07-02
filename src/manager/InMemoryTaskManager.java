@@ -173,16 +173,17 @@ public class InMemoryTaskManager implements TaskManager {
         return historyManager.getHistory();
     }
 
-    private void setEpicStatus(Epic epic) { //понял, переделаю)
+    private void setEpicStatus(Epic epic) {
         ArrayList<SubTask> subTasksUpd = new ArrayList<>();
         for (int i = 0; i < epic.getSubTaskIDs().size(); i++) {
             subTasksUpd.add(subTasks.get(epic.getSubTaskIDs().get(i)));
         }
-        Stream subTaskStreamNew = subTasksUpd.stream();
-        Stream subTaskStreamDone = subTasksUpd.stream();
-        if (subTaskStreamNew.allMatch(x->x=="NEW") || (subTasksUpd.size() == 0)){
+        boolean isAllSubtaskNew = subTasksUpd.stream().allMatch(subtask -> subtask.getStatus().toString().equals("NEW"));
+        boolean isAllSubtaskDONE = subTasksUpd.stream().allMatch(subtask -> subtask.getStatus().toString().equals("DONE"));
+
+        if (isAllSubtaskNew || (subTasksUpd.size() == 0)){
             epic.setStatus(TaskStatus.NEW);
-        } else if (subTaskStreamDone.allMatch(x->x=="DONE")){
+        } else if (isAllSubtaskDONE){
             epic.setStatus(TaskStatus.DONE);
         } else {
             epic.setStatus(TaskStatus.IN_PROGRESS);
