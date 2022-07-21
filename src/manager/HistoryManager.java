@@ -10,4 +10,6 @@ public interface HistoryManager { //история просмотров
 
     List<Task>getHistory(); //получение списка просмотра
 
+    void remove(int id); //удаление задач из просмотора
+
 }
