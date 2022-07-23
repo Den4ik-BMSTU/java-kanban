@@ -4,10 +4,10 @@ import task.Task;
 import task.SubTask;
 import task.Epic;
 import task.TaskStatus;
-import manager.InMemoryHistoryManager;
+
 
 import java.util.*;
-import java.util.stream.Stream;
+
 
 public class InMemoryTaskManager implements TaskManager {
 
@@ -32,6 +32,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void createTask(Task task){
         task.setId(newId());
+        tasks.put(task.getId(), task);
     }
 
     @Override
@@ -61,6 +62,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void deleteTaskById(int taskId){
         tasks.remove(taskId);
+        historyManager.remove(taskId);
     }
 
     //Epic
@@ -96,11 +98,12 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void deleteEpicById(int epicId) { //ты имел ввиду вот так, покороче код сделать?
+    public void deleteEpicById(int epicId) {
         Epic epic = epics.remove(epicId);
         for (Integer subTaskIds : epic.getSubTaskIDs()){
             subTasks.remove(subTaskIds);
         }
+        historyManager.remove(epicId);
     }
 
 
@@ -153,11 +156,15 @@ public class InMemoryTaskManager implements TaskManager {
             }
         }
         this.setEpicStatus(epic);
+        historyManager.remove(subTaskId);
     }
 
     @Override
     public void deleteAllSubTasks(){
         subTasks.clear();
+        for (Integer numbers : subTasks.keySet()){
+            setEpicStatus(epics.get(numbers));
+        }
     }
 
     @Override
@@ -181,7 +188,7 @@ public class InMemoryTaskManager implements TaskManager {
         boolean isAllSubtaskNew = subTasksUpd.stream().allMatch(subtask -> subtask.getStatus().toString().equals("NEW"));
         boolean isAllSubtaskDONE = subTasksUpd.stream().allMatch(subtask -> subtask.getStatus().toString().equals("DONE"));
 
-        if (isAllSubtaskNew || (subTasksUpd.size() == 0)){
+        if (isAllSubtaskNew){
             epic.setStatus(TaskStatus.NEW);
         } else if (isAllSubtaskDONE){
             epic.setStatus(TaskStatus.DONE);

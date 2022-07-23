@@ -8,40 +8,42 @@ public class Main {
     public static void main(String[] agrs){
         TaskManager inMemoryTaskManager = Managers.getDefault();
 
-        inMemoryTaskManager.createTask(new Task("Таск 1", TaskStatus.NEW, "Доделать финальный проект"));
-        inMemoryTaskManager.createTask(new Task("Таск 2", TaskStatus.NEW, "Купить еды"));
-        inMemoryTaskManager.createTask(new Task("Таск 3", TaskStatus.NEW, "Купить воды"));
-        inMemoryTaskManager.createTask(new Task("Таск 4", TaskStatus.NEW, "Купить пиццу"));
-        inMemoryTaskManager.createTask(new Task("Таск 5", TaskStatus.NEW, "Купить мороженое"));
-        inMemoryTaskManager.createTask(new Task("Таск 6", TaskStatus.NEW, "Купить билеты"));
-        inMemoryTaskManager.createTask(new Task("Таск 7", TaskStatus.NEW, "Купить путёвку"));
-        inMemoryTaskManager.createTask(new Task("Таск 8", TaskStatus.NEW, "Купить что-то"));
-        inMemoryTaskManager.createTask(new Task("Таск 9", TaskStatus.NEW, "Купить велосипед"));
-        inMemoryTaskManager.createTask(new Task("Таск 10", TaskStatus.NEW, "Отдохнуть"));
-        inMemoryTaskManager.createTask(new Task("Таск 11", TaskStatus.NEW, "Помыть посуду"));
-        inMemoryTaskManager.createTask(new Task("Таск 12", TaskStatus.NEW, "Сделать уборку"));
-        inMemoryTaskManager.createTask(new Task("Таск 13", TaskStatus.NEW, "Подготовить одежду"));
-        inMemoryTaskManager.createEpic(new Epic("Эпик 1", TaskStatus.NEW, "Покупка квартиры"));
-        inMemoryTaskManager.createEpic(new Epic("Эпик 2", TaskStatus.NEW, "Продажа дачи"));
-        inMemoryTaskManager.createEpic(new Epic("Эпик 3", TaskStatus.NEW, "Покупка машины"));
-        inMemoryTaskManager.createEpic(new Epic("Эпик 4", TaskStatus.NEW, "Ремонт квартиры"));
-        inMemoryTaskManager.createEpic(new Epic("Эпик 5", TaskStatus.NEW, "Переезд"));
-        inMemoryTaskManager.createEpic(new Epic("Эпик 6", TaskStatus.NEW, "Полёт на курорт"));
-        inMemoryTaskManager.addSubTask(new SubTask("Сабтаск 1", TaskStatus.NEW, "---", 15));
-        inMemoryTaskManager.addSubTask(new SubTask("Сабтаск 2", TaskStatus.NEW, "---", 15));
-        inMemoryTaskManager.addSubTask(new SubTask("Сабтаск 3", TaskStatus.NEW, "---", 16));
+        inMemoryTaskManager.createTask(new Task("Таск 1", TaskStatus.NEW, "Задача1"));
+        inMemoryTaskManager.createTask(new Task("Таск 2", TaskStatus.NEW, "Задача2"));
+        inMemoryTaskManager.createEpic(new Epic("Epic 1", TaskStatus.NEW, "Эпик 1"));
+        inMemoryTaskManager.createEpic(new Epic("Epic 2", TaskStatus.NEW, "Эпик 2"));
+        inMemoryTaskManager.addSubTask(new SubTask("SubTask1", TaskStatus.NEW, "Субтаск 1", 3));
+        inMemoryTaskManager.addSubTask(new SubTask("SubTask 2", TaskStatus.NEW, "Субтаск 2", 3));
+        inMemoryTaskManager.addSubTask(new SubTask("SubTask 3", TaskStatus.NEW, "Субтаск 3", 3));
 
-        for (int i = 1; i <= 13; i++) {
+        for (int i = 1; i <= 2; i++) {
             inMemoryTaskManager.getTaskById(i);
         }
-        for (int i = 14; i <= 18; i++) {
+        for (int i = 3; i <= 4; i++) {
             inMemoryTaskManager.getEpicById(i);
         }
-        inMemoryTaskManager.getTaskById(4);
+
+        for (int i = 5; i <= 7; i++) {
+            inMemoryTaskManager.getSubtaskById(i);
+        }
+
+        for (int i = 1; i <= 2; i++) {
+            inMemoryTaskManager.getTaskById(i);
+        }
+
+        System.out.println(inMemoryTaskManager.getHistory());
+
+        /*inMemoryTaskManager.getTaskById(4);
         inMemoryTaskManager.getSubtaskById(20);
         inMemoryTaskManager.getSubtaskById(21);
         inMemoryTaskManager.getTaskById(9);
-        inMemoryTaskManager.getSubtaskById(22);
+        inMemoryTaskManager.getSubtaskById(22);*/
+
+        inMemoryTaskManager.deleteTaskById(2);
+
+        System.out.println(inMemoryTaskManager.getHistory());
+
+        inMemoryTaskManager.deleteEpicById(3);
 
         System.out.println(inMemoryTaskManager.getHistory());
     }
