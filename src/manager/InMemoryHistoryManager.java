@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class InMemoryHistoryManager implements HistoryManager {
 
-    private  final Map<Integer, Node<Task>> customeLinkedList = new LinkedHashMap<>();//так можно? или класс лучше создать?
+    private  final Map<Integer, Node<Task>> nodeMap = new LinkedHashMap<>();
 
     private Node<Task> first;
     private Node<Task> last;
@@ -35,7 +35,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         final int id = task.getId();
         remove(id);
         linkLast(task);
-        customeLinkedList.put(id,getLast());
+        nodeMap.put(id,last);
     }
 
     @Override
@@ -45,12 +45,12 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public void remove(int id) { //удаление по ид
-        Node<Task> task = customeLinkedList.get(id);
+        Node<Task> task = nodeMap.get(id);
         Node<Task>  current = first;
-        while(current != null && current != task) {
+        if  (current != null && current != task) {
             current = current.next;
         }
-        customeLinkedList.remove(id);
+        nodeMap.remove(id);
         removeNode(task);
     }
 
@@ -65,20 +65,15 @@ public class InMemoryHistoryManager implements HistoryManager {
         }
     }
 
-    private  Node<Task> getLast(){ //получение последнего
-        final Node<Task> tail = last;
-        return tail;
-    }
-
     private List<Task> getTasks() { // собирать все задачи из списка в обычный ArrayList
         List<Task> allListHistory = new ArrayList<>();
-        for (Node<Task> node : customeLinkedList.values()){
+        for (Node<Task> node : nodeMap.values()){
             allListHistory.add(node.value);
         }
         return allListHistory;
     }
 
-    private void removeNode(Node node) {
+    private void removeNode(Node<Task> node) {
         if (node != null){
             if (node.previous != null){
                 node.previous.next = node.next;
