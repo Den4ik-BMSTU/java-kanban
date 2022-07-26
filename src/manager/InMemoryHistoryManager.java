@@ -45,18 +45,13 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public void remove(int id) { //удаление по ид
-        Node<Task> task = nodeMap.get(id);
-        Node<Task>  current = first;
-        if  (current != null && current != task) {
-            current = current.next;
-        }
         nodeMap.remove(id);
-        removeNode(task);
+        removeNode(nodeMap.get(id));
     }
 
     private void linkLast(Task task) { // добавлять задачу в конец списка
         final Node<Task> secondLast = last;
-        final Node<Task> newNode = new Node(secondLast, task, null);
+        final Node<Task> newNode = new Node<Task>(secondLast, task, null);
         last = newNode;
         if (secondLast != null) {
             secondLast.next = newNode;
