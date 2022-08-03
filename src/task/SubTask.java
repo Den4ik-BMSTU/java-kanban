@@ -2,7 +2,7 @@ package task;
 
 import java.util.Objects;
 
-public class SubTask extends Task{ //а я всё думал что тут у меня криво работает)
+public class SubTask extends Task{
 
     private int epicId;
 
