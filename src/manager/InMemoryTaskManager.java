@@ -169,7 +169,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void updateSubtask(SubTask subTask) { //переделал по id
+    public void updateSubtask(SubTask subTask) {
         if (subTasks.containsKey(subTask.getId())) {
             subTasks.put(subTask.getId(), subTask);
             this.setEpicStatus(epics.get(subTask.getEpicId()));
@@ -179,6 +179,10 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public List<Task> getHistory() {
         return historyManager.getHistory();
+    }
+
+    protected HistoryManager getHistoryManager() {
+        return historyManager;
     }
 
     private void setEpicStatus(Epic epic) {

@@ -14,7 +14,6 @@ public interface TaskManager {
     // Task
     void createTask(Task task); // создание таска
 
-
     Collection<Task> getTasks(); //получение списка тасков
 
     Task getTaskById(int taskId); //получение таска по ИД
@@ -54,6 +53,4 @@ public interface TaskManager {
     void updateSubtask(SubTask subTask); //обновить подзадачу
 
     List<Task>getHistory();
-
-    //вроде ничего не забыл
 }

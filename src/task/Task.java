@@ -4,12 +4,14 @@ import java.util.Objects;
 
 public class Task {
     protected int id;
+    protected TaskType type;
     protected String name;
     protected TaskStatus status;
     protected String desription;
 
-    public Task (String name, TaskStatus status, String desription){
+    public Task (String name, TaskType type, TaskStatus status, String desription){
         this.name=name;
+        this.type=type;
         this.status=status;
         this.desription=desription;
     }
@@ -21,6 +23,10 @@ public class Task {
 
     public void setName(String name){
         this.name=name;
+    }
+
+    public void setType (TaskType type){
+        this.type=type;
     }
 
     public void setStatus(TaskStatus status){
@@ -38,6 +44,10 @@ public class Task {
 
     public String getName(){
         return name;
+    }
+
+    public TaskType getType(){
+        return type;
     }
 
     public TaskStatus getStatus(){
