@@ -7,13 +7,13 @@ public class Task {
     protected TaskType type;
     protected String name;
     protected TaskStatus status;
-    protected String desription;
+    protected String description;
 
-    public Task (String name, TaskType type, TaskStatus status, String desription){
+    public Task (String name, TaskType type, TaskStatus status, String description){
         this.name=name;
         this.type=type;
         this.status=status;
-        this.desription=desription;
+        this.description=description;
     }
 
     //Set-еры
@@ -34,7 +34,7 @@ public class Task {
     }
 
     public void setDesription(String desription){
-        this.desription=desription;
+        this.description=desription;
     }
 
     //Get-еры
@@ -55,7 +55,7 @@ public class Task {
     }
 
     public String getDesription(){
-        return desription;
+        return description;
     }
 
     //Переопределения
@@ -66,7 +66,7 @@ public class Task {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", status=" + status +
-                ", desription='" + desription + '\'' +
+                ", desription='" + description + '\'' +
                 '}';
     }
 
@@ -76,11 +76,11 @@ public class Task {
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
         return id == task.id && Objects.equals(name, task.name) && Objects.equals(status, task.status)
-                && Objects.equals(desription, task.desription);
+                && Objects.equals(description, task.description);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, status, desription);
+        return Objects.hash(id, name, status, description);
     }
 }

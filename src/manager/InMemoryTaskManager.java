@@ -11,11 +11,11 @@ import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
 
-    private HistoryManager historyManager;
-    private Map<Integer, Task> tasks;
-    private Map<Integer, Epic> epics;
-    private Map<Integer, SubTask> subTasks;
-    private int i=0;
+    protected HistoryManager historyManager;
+    protected Map<Integer, Task> tasks;
+    protected Map<Integer, Epic> epics;
+    protected Map<Integer, SubTask> subTasks;
+    protected int id=0;
 
     public InMemoryTaskManager(){
         this.epics= new HashMap<>();
@@ -26,7 +26,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     private int newId(){
-        return ++i;
+        return ++id;
     }
     // Task
     @Override
