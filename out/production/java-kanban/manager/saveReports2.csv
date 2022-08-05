@@ -4,6 +4,5 @@ id,type,name,status,description,epic
 3,EPIC,Epic 1,NEW,Эпик 1,
 4,EPIC,Epic 2,NEW,Эпик 2,
 5,SUBTASK,SubTask1,NEW,Субтаск 1,3
-6,SUBTASK,SubTask 2,NEW,Субтаск 2,3
 
-1,2,3,5,4,
+2,3,5,4,

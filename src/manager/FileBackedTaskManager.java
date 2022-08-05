@@ -1,19 +1,17 @@
 package manager;
 
+import exception.ManagerSaveException;
 import task.*;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.util.*;
 
-import static task.TaskType.SUBTASK;
-
-public class FileBackedTaskManager extends  InMemoryTaskManager implements TaskManager{
+public class FileBackedTaskManager extends  InMemoryTaskManager {
 
     public static void main(String[] args) {
 
-        File fileForExample = new File("src/manager/saveReports2.csv");
+        File fileForExample = new File("src/testFile.csv");
         FileBackedTaskManager fileBackedTasksManager = new FileBackedTaskManager(fileForExample);
         fileBackedTasksManager.createTask(new Task("Таск 1", TaskType.TASK, TaskStatus.NEW, "Задача1"));
         fileBackedTasksManager.createTask(new Task("Таск 2", TaskType.TASK, TaskStatus.NEW, "Задача2"));
@@ -34,7 +32,8 @@ public class FileBackedTaskManager extends  InMemoryTaskManager implements TaskM
         //fileBackedTasksManager.getSubtaskById(7);
         //fileBackedTasksManager.getSubtaskById(6);
 
-        FileBackedTaskManager fileBackedTasksManager2 = FileBackedTaskManager.loadFromFile(new File("src/manager/saveReports2.csv"));
+        FileBackedTaskManager fileBackedTasksManager2 = FileBackedTaskManager.loadFromFile(
+                new File("src/testFile.csv"));
         System.out.println(fileBackedTasksManager2);
     }
 
@@ -45,7 +44,7 @@ public class FileBackedTaskManager extends  InMemoryTaskManager implements TaskM
         this.file = file;
     }
 
-    public static List<Integer> historyFromString (String value){ // для сохранения и восстановления менеджера истории из CSV.
+    private static List<Integer> historyFromString (String value){ // для сохранения и восстановления менеджера истории из CSV.
         List<Integer> history = new ArrayList<>();
         if (value.isEmpty()) {
           return history;
@@ -57,19 +56,15 @@ public class FileBackedTaskManager extends  InMemoryTaskManager implements TaskM
         return history;
     }
 
-    public static Task fromString(String value) { // метод создания задачи из строки
-        String name;
-        String description;
-        TaskStatus status;
-        TaskType type;
-        int id;
+    private static Task fromString(String value) { // метод создания задачи из строки
 
         String[] line = value.split(",");
-        name = line[2];
-        description = line[4];
-        id = Integer.parseInt(line[0]);
-        status = TaskStatus.valueOf(line[3]);
-        type = TaskType.valueOf(line[1]);
+        int id = Integer.parseInt(line[0]);
+        TaskType type = TaskType.valueOf(line[1]);
+        String name = line[2];
+        TaskStatus status = TaskStatus.valueOf(line[3]);
+        String description = line[4];
+
         switch (type) {
             case EPIC:
                 Epic epic = new Epic(name, type, status, description);
@@ -87,30 +82,7 @@ public class FileBackedTaskManager extends  InMemoryTaskManager implements TaskM
         return null;
     }
 
-    /*public static Task fromString(String value) {
-        final String[] line = value.split(",");
-        int id = Integer.parseInt(line[0]);
-        TaskType type = TaskType.valueOf(line[1]);
-        String name = line[2];
-        TaskStatus status = TaskStatus.valueOf(line[3]);
-        String description = line[4];
-                Task task = null;
-        switch (type) {
-            case EPIC:
-                task = new Epic(name, type, status, description);
-                break;
-            case SUBTASK:
-                task = new SubTask(name, type, status, description, Integer.parseInt(line[5].trim()));
-                break;
-            case TASK:
-                task = new Task(name, type, status, description);
-        }
-        return task;
-    }*/
-
-
-
-    public String toStringFormat(Task task) {
+    private String toStringFormat(Task task) {
         StringBuilder sb = new StringBuilder();
         sb.append(task.getId())
                 .append(",").append(task.getType())
@@ -126,19 +98,19 @@ public class FileBackedTaskManager extends  InMemoryTaskManager implements TaskM
         return sb.toString();
     }
 
-    public void save() {
+    private void save() {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
             bw.write("id,type,name,status,description,epic\n");
-            for (Map.Entry<Integer, Task> taskEntry : tasks.entrySet()) {
-                bw.write(toStringFormat(taskEntry.getValue()));
+            for (Task task : tasks.values()) {
+                bw.write(toStringFormat(task));
                 bw.newLine();
             }
-            for (Map.Entry<Integer, Epic> epicEntry : epics.entrySet()) {
-                bw.write(toStringFormat(epicEntry.getValue()));
+            for (Task epic : epics.values()) {
+                bw.write(toStringFormat(epic));
                 bw.newLine();
             }
-            for (Map.Entry<Integer, SubTask> subEntry : subTasks.entrySet()) {
-                bw.write(toStringFormat(subEntry.getValue()));
+            for (Task subTask : subTasks.values()) {
+                bw.write(toStringFormat(subTask));
                 bw.newLine();
             }
             bw.write("\n");
@@ -148,7 +120,7 @@ public class FileBackedTaskManager extends  InMemoryTaskManager implements TaskM
         }
     }
 
-    public static String toString(HistoryManager manager) { // для сохранения и восстановления менеджера истории из CSV.
+    private static String toString(HistoryManager manager) { // для сохранения и восстановления менеджера истории из CSV.
         StringBuilder line = new StringBuilder();
         if (manager.getHistory().size() != 0) {
             for (Task task : manager.getHistory()) {
@@ -201,7 +173,7 @@ public class FileBackedTaskManager extends  InMemoryTaskManager implements TaskM
         return fileBackedTasksManager;
     }
 
-    public static void loadHistory(FileBackedTaskManager fileBackedTasksManager, String value) {
+    private static void loadHistory(FileBackedTaskManager fileBackedTasksManager, String value) {
         List<Integer> history = historyFromString(value);
         for (Integer taskId : history) {
             if (fileBackedTasksManager.getTaskById(taskId) != null) {
