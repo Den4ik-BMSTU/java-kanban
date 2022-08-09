@@ -4,6 +4,8 @@ import exception.ManagerSaveException;
 import task.*;
 
 import java.io.*;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.util.*;
 
@@ -38,6 +40,7 @@ public class FileBackedTaskManager extends  InMemoryTaskManager {
     }
 
     private final File file;
+    private static final String HEADER = "id,type,name,status,description,epic";
 
     public FileBackedTaskManager (File file) {
         super();
@@ -98,7 +101,7 @@ public class FileBackedTaskManager extends  InMemoryTaskManager {
         return sb.toString();
     }
 
-    private void save() {
+   /* private void save() {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
             bw.write("id,type,name,status,description,epic\n");
             for (Task task : tasks.values()) {
@@ -117,6 +120,33 @@ public class FileBackedTaskManager extends  InMemoryTaskManager {
             bw.write(toString(this.historyManager));
         } catch (IOException e) {
             throw new ManagerSaveException("Ошибка записи файла", e);
+        }
+    }*/
+
+    protected void save() {
+        try (FileWriter fileWriter = new FileWriter(file, StandardCharsets.UTF_8)){
+            BufferedWriter writer = new BufferedWriter(fileWriter);
+            writer.write(HEADER);
+            writer.newLine();
+
+            for (Task task : getTasks().values()) {
+                writer.write(toStringFormat(task));
+                writer.newLine();
+            }
+            for (Task task : getEpics().values()) {
+                writer.write(toStringFormat(task));
+                writer.newLine();
+            }
+            for (Task task : getAllSubTaks().values()) {
+                writer.write(toStringFormat(task));
+                writer.newLine();
+            }
+            writer.newLine();
+            writer.write(toString(getHistory()));
+            writer.newLine();
+            writer.flush();
+        } catch (IOException e){
+            throw new ManagerSaveException("Mistayke", e);
         }
     }
 
