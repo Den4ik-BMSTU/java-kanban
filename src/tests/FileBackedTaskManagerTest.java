@@ -10,13 +10,13 @@ public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskMan
 
     @Override
     public FileBackedTaskManager createManager() {
-        return new FileBackedTaskManager(new File("C:\\Users\\stolpovsky\\Desktop\\dev\\java-kanban\\out\\data.csv"));
+        return new FileBackedTaskManager(new File("out/data.csv"));
     }
-
+//"C:\\Users\\stolpovsky\\Desktop\\dev\\java-kanban\\out\\production\\java-kanban\\tests_files\\emptyData.csv"
     @Test
     public void shouldLoadFromEmptyFile() {
         FileBackedTaskManager emptyManager = FileBackedTaskManager.loadFromFile(new File(
-                "C:\\Users\\stolpovsky\\Desktop\\dev\\java-kanban\\out\\production\\java-kanban\\tests_files\\emptyData.csv"));
+                "out/tests_files/emptyData.csv"));
         Assertions.assertEquals(0, emptyManager.getAllTasks().size());
         Assertions.assertEquals(0, emptyManager.getAllSubTasks().size());
         Assertions.assertEquals(0, emptyManager.getAllEpics().size());
@@ -28,7 +28,7 @@ public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskMan
     @Test
     public void shouldLoadWithOneEmptyEpic() {
         FileBackedTaskManager oneEpicManager = FileBackedTaskManager.loadFromFile(new File(
-                "C:\\Users\\stolpovsky\\Desktop\\dev\\java-kanban\\out\\production\\java-kanban\\tests_files\\emptyEpic.csv"));
+                "out/tests_files/emptyEpic.csv"));
         Assertions.assertEquals(2, oneEpicManager.getAllEpics().size());
         Assertions.assertEquals(3, oneEpicManager.getAllTasks().size());
         Assertions.assertEquals(2, oneEpicManager.getHistory().size());
@@ -39,7 +39,7 @@ public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskMan
     @Test
     public void shouldLoadWithEmptyHistory() {
         FileBackedTaskManager emptyHistoryManager = FileBackedTaskManager.loadFromFile(new File(
-                "C:\\Users\\stolpovsky\\Desktop\\dev\\java-kanban\\out\\production\\java-kanban\\tests_files\\noHistory.csv"));
+                "out/tests_files/noHistory.csv"));
         Assertions.assertEquals(1, emptyHistoryManager.getAllEpics().size());
         Assertions.assertEquals(3, emptyHistoryManager.getAllTasks().size());
         Assertions.assertEquals(0, emptyHistoryManager.getHistory().size());
@@ -48,7 +48,7 @@ public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskMan
     @Test
     public void shouldLoadWithoutTimings() {
         FileBackedTaskManager emptyHistoryManager = FileBackedTaskManager.loadFromFile(new File(
-                "C:\\Users\\stolpovsky\\Desktop\\dev\\java-kanban\\out\\production\\java-kanban\\tests_files\\noTiming.csv"));
+                "out/tests_files/noTiming.csv"));
         Assertions.assertEquals(2, emptyHistoryManager.getAllEpics().size());
         Assertions.assertEquals(2, emptyHistoryManager.getAllTasks().size());
         Assertions.assertEquals(1, emptyHistoryManager.getAllSubTasks().size());
@@ -58,7 +58,7 @@ public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskMan
     @Test
     public void shouldLoadFromFile() {
         FileBackedTaskManager standartManager = FileBackedTaskManager.loadFromFile(new File(
-                "C:\\Users\\stolpovsky\\Desktop\\dev\\java-kanban\\out\\production\\java-kanban\\tests_files\\standartCase.csv"));
+                "out/tests_files/standartCase.csv"));
         Assertions.assertEquals(1, standartManager.getAllEpics().size());
         Assertions.assertEquals(6, standartManager.getAllTasks().size());
         Assertions.assertEquals(3, standartManager.getAllSubTasks().size());

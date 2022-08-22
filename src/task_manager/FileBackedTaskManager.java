@@ -258,9 +258,4 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
         save();
         return epic;
     }
-
-    @Override
-    public Set<Task> getPrioritizedTasks() {
-        return super.getPrioritizedTasks();
-    }
 }

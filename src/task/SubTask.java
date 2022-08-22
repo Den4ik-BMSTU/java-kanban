@@ -30,8 +30,8 @@ public class SubTask extends Task {
 
     @Override
     public String toString() {
-        String start = "Start time not defined";
-        String end = "End time cannot be calculated";
+        String start = "Время начала не определено";
+        String end = "Время окончания не может быть рассчитано";
         if (getStartTime() != null) {
             start = getStartTime().format(FORMATTER);
         }

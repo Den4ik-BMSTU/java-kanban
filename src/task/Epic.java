@@ -92,7 +92,7 @@ public class Epic extends Task {
             end = getEndTime().format(FORMATTER);
         }
         return super.getId() + DIVIDER + super.getType() + DIVIDER + super.getName() + DIVIDER
-                + super.getStatus() + DIVIDER + super.getDescription() + DIVIDER + start
+                + super.getStatus() + DIVIDER + super.getDescription() + DIVIDER + getSubTaskIDs() + start
                 + DIVIDER + super.getDuration() + DIVIDER + end;
     }
 

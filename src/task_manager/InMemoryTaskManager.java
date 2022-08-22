@@ -321,8 +321,8 @@ public class InMemoryTaskManager implements TaskManager {
         for (int i = 0; i < epic.getSubTaskIDs().size(); i++) {
             subTasksUpd.add(subTasks.get(epic.getSubTaskIDs().get(i)));
         }
-        boolean isAllSubtaskNew = subTasksUpd.stream().allMatch(subtask -> subtask.getStatus().toString().equals("NEW"));
-        boolean isAllSubtaskDONE = subTasksUpd.stream().allMatch(subtask -> subtask.getStatus().toString().equals("DONE"));
+        boolean isAllSubtaskNew = subTasksUpd.stream().allMatch(subtask -> subtask.getStatus().equals("NEW"));
+        boolean isAllSubtaskDONE = subTasksUpd.stream().allMatch(subtask -> subtask.getStatus().equals("DONE"));
 
         if (isAllSubtaskNew){
             epic.setStatus(TaskStatus.NEW);

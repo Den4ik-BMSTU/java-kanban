@@ -56,6 +56,7 @@ public class EpicTest {
     public void shouldBeStatusInProgressIfOneIsInProgress() {
         task_1.setStatus(TaskStatus.IN_PROGRESS);
         addSubtasks();
+
         Assertions.assertEquals(3, epic.getSubTasks().size());
         Assertions.assertEquals(TaskStatus.IN_PROGRESS, epic.getStatus());
     }
