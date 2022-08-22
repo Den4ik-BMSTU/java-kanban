@@ -1,0 +1,17 @@
+package history_manager;
+
+import task.Task;
+
+import java.util.List;
+
+public interface HistoryManager {//история просмотров
+
+    // Добавление задачи в историю просмотров
+    void add(Task task);
+
+    // Удаление задачи из истории
+    void remove(int id);
+
+    // Вызов истории просмотров
+    List<Task> getHistory();
+}

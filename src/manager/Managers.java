@@ -1,22 +1,19 @@
 package manager;
 
+import history_manager.HistoryManager;
+import history_manager.InMemoryHistoryManager;
+import task_manager.FileBackedTaskManager;
+import task_manager.TaskManager;
+
 import java.io.File;
 
-public final class Managers {
+public class Managers {
 
-    private static TaskManager taskManager;
-    private static HistoryManager historyManager;
-
-    static {
-        historyManager = new InMemoryHistoryManager();
-        taskManager = new FileBackedTaskManager(new File("src/manager/saveReports.csv"));
-    }
-        public static TaskManager getDefault() {
-        return new InMemoryTaskManager();
+    public static TaskManager getDefault(File file) {
+        return new FileBackedTaskManager(file);
     }
 
     public static HistoryManager getDefaultHistory() {
         return new InMemoryHistoryManager();
     }
-
 }

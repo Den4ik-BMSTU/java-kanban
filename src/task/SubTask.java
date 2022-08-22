@@ -1,33 +1,46 @@
 package task;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class SubTask extends Task{
-
+public class SubTask extends Task {
     private int epicId;
 
-    public SubTask(String name, TaskType type, TaskStatus status, String description, int epicId) {
-        super(name, type, status, description);
-        this.epicId=epicId;
+    // Полная версия конструктора.
+    public SubTask(String name, String description, TaskStatus status, int epicId, int duration, LocalDateTime startTime) {
+        super(name, description, status, duration, startTime);
+        super.setType(TaskType.SUBTASK);
+        this.epicId = epicId;
     }
 
-    public void setEpicId(int epicId){
-        this.epicId=epicId;
+    // Короткая версия для тестов.
+    public SubTask(String name, String description, int epicId) {
+        super(name, description);
+        super.setType(TaskType.SUBTASK);
+        this.epicId = epicId;
     }
 
-    public int getEpicId(){
+    public int getEpicId() {
         return epicId;
+    }
+
+    public void setEpicId(int epicId) {
+        this.epicId = epicId;
     }
 
     @Override
     public String toString() {
-        return "Subtask{" +
-                "id=" + id +
-                ", name='" + name +
-                "', status=" + status +
-                ", description='" + description +
-                "', epicId=" + epicId +
-                '}';
+        String start = "Start time not defined";
+        String end = "End time cannot be calculated";
+        if (getStartTime() != null) {
+            start = getStartTime().format(FORMATTER);
+        }
+        if (getEndTime() != null) {
+            end = getEndTime().format(FORMATTER);
+        }
+        return getId() + DIVIDER + getType() + DIVIDER + getName() + DIVIDER + getStatus()
+                + DIVIDER + getDescription() + DIVIDER + start + DIVIDER + getDuration()
+                + DIVIDER + end + DIVIDER + epicId;
     }
 
     @Override
@@ -35,8 +48,8 @@ public class SubTask extends Task{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
-        SubTask subtask = (SubTask) o;
-        return epicId == subtask.epicId;
+        SubTask subTask = (SubTask) o;
+        return epicId == subTask.epicId;
     }
 
     @Override
