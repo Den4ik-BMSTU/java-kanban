@@ -317,7 +317,29 @@ public class InMemoryTaskManager implements TaskManager {
 
     // Вычисление статуса Эпика
     protected void setEpicStatus(Epic epic) {
-        ArrayList<SubTask> subTasksUpd = new ArrayList<>();
+        List<SubTask> subTasks = epic.getSubTasks();
+        int counterNew = 0;
+        int counterDone = 0;
+        for (SubTask task : subTasks) {
+            if (task.getStatus() == TaskStatus.DONE) {
+                counterDone++;
+            } else if (task.getStatus() == TaskStatus.NEW) {
+                counterNew++;
+            }
+        }
+        if (subTasks.size() == 0) {
+            epic.setStatus(TaskStatus.NEW);
+        } else if (counterDone == subTasks.size()) {
+            epic.setStatus(TaskStatus.DONE);
+        } else if (counterNew == subTasks.size()) {
+            epic.setStatus(TaskStatus.NEW);
+        } else {
+            epic.setStatus(TaskStatus.IN_PROGRESS);
+        }
+    }
+
+
+        /*ArrayList<SubTask> subTasksUpd = new ArrayList<>();
         for (int i = 0; i < epic.getSubTaskIDs().size(); i++) {
             subTasksUpd.add(subTasks.get(epic.getSubTaskIDs().get(i)));
         }
@@ -331,7 +353,7 @@ public class InMemoryTaskManager implements TaskManager {
         } else {
             epic.setStatus(TaskStatus.IN_PROGRESS);
         }
-    }
+    }*/
 
     // Вспомогательный метод, вычисляющий продолжительность, время начала и окончания Эпика.
     protected void setEpicTimes(Epic epic) {
