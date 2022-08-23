@@ -104,7 +104,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
                 Task task = new Task(fields[2], fields[4]);
                 task.setStatus(TaskStatus.valueOf(fields[3]));
                 task.setId(Integer.parseInt(fields[0]));
-                if (fields[5].equals("Время начала не определено")) {
+                if (fields[5].equals("Start time not defined")) {
                     task.setStartTime(null);
                 } else {
                     task.setStartTime(LocalDateTime.parse(fields[5], FORMATTER));
@@ -120,7 +120,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
                 Task subtask = new SubTask(fields[2], fields[4], Integer.parseInt(fields[8]));
                 subtask.setStatus(TaskStatus.valueOf(fields[3]));
                 subtask.setId(Integer.parseInt(fields[0]));
-                if (fields[5].equals("Время начала не определено")) {
+                if (fields[5].equals("Start time not defined")) {
                     subtask.setStartTime(null);
                 } else {
                     subtask.setStartTime(LocalDateTime.parse(fields[5], FORMATTER));
