@@ -47,15 +47,6 @@ public class Main {
         inMemoryTaskManager.removeEpic(3);
 
         System.out.println(inMemoryTaskManager.getHistory());*/
-        //TaskManager taskManager = Managers.getDefault(new File("testCSV"));
-        FileBackedTaskManager fileBackedTaskManager =  FileBackedTaskManager.loadFromFile(new File("src/testFile.csv"));
-        Task task1 = new Task("String1", "String2");
-        //taskManager.addTask(task1);
-        //taskManager.getTask(task1.getId());
-        //List<Task> history = taskManager.getHistory();
-        List<Task> history = fileBackedTaskManager.getHistory();
-        System.out.println("history = ["+history+"]");
-
     }
 }
 /*Привет!*/

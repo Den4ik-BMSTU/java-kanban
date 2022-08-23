@@ -111,7 +111,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     @Test
     public void shouldNotAddNullTask() {
         int id = manager.addTask(null);
-        Assertions.assertEquals(-2, id);
+        Assertions.assertEquals(id, -2);
     }
 
     @Test

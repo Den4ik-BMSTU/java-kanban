@@ -12,7 +12,7 @@ public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskMan
     public FileBackedTaskManager createManager() {
         return new FileBackedTaskManager(new File("src/data.csv"));
     }
-//"C:\\Users\\stolpovsky\\Desktop\\dev\\java-kanban\\out\\production\\java-kanban\\tests_files\\emptyData.csv"
+
     @Test
     public void shouldLoadFromEmptyFile() {
         FileBackedTaskManager emptyManager = FileBackedTaskManager.loadFromFile(new File(

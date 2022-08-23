@@ -80,7 +80,10 @@ public class InMemoryTaskManager implements TaskManager {
 
     // Создание новой задачи
     @Override
-    public int addTask(Task task) {
+    public int addTask(Task task) {//твоё замечание понял, но как это быстро поправить не разобрался, пока сдаю без этого,
+        // если разберусь, то обновлю, я перед собой ставил задачу чтобы всё работало, знаю что код не идеальный,
+        // но в теории кроме Equals ничего не давали, на данный момент тесты все работают, с точки зрения задания всё работает,
+        // а код поправлю потихоньку
         try {
             validateNotNull(task);
             validateTimes(task);
@@ -337,7 +340,7 @@ public class InMemoryTaskManager implements TaskManager {
             epic.setStatus(TaskStatus.IN_PROGRESS);
         }
     }
-    //почему данный код не выдаёт правльное значение?
+    //почему данный код не выдаёт правильное значение?
         /*ArrayList<SubTask> subTasksUpd = new ArrayList<>();
         for (int i = 0; i < epic.getSubTaskIDs().size(); i++) {
             subTasksUpd.add(subTasks.get(epic.getSubTaskIDs().get(i)));
@@ -392,7 +395,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     // Валидатор, проверяющий задачу на null.
-    private void validateNotNull(Task task) throws TaskNotFoundException {
+    public void validateNotNull(Task task) throws TaskNotFoundException {
         if (task == null) {
             throw new TaskNotFoundException("Задача не обнаружена");
         }
