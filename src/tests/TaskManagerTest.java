@@ -1,5 +1,6 @@
 package tests;
 
+import exception.TaskNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -111,7 +112,10 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     @Test
     public void shouldNotAddNullTask() {
         int id = manager.addTask(null);
-        Assertions.assertEquals(id, -2);
+        Assertions.assertEquals(id,-2);
+       //Task savedTask = manager.getTask(id);
+        //Assertions.assertThrows(TaskNotFoundException.class,()->{manager.addTask(null);});
+        //Assertions.assertEquals("Задача не сохранилась", thrown.getMessage());
     }
 
     @Test

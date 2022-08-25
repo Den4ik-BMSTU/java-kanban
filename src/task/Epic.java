@@ -83,17 +83,7 @@ public class Epic extends Task {
 
     @Override
     public String toString() {
-        String start = "Время начала не определено";
-        String end = "Время окончания не может быть рассчитано";
-        if (getStartTime() != null) {
-            start = getStartTime().format(FORMATTER);
-        }
-        if (getEndTime() != null) {
-            end = getEndTime().format(FORMATTER);
-        }
-        return super.getId() + DIVIDER + super.getType() + DIVIDER + super.getName() + DIVIDER
-                + super.getStatus() + DIVIDER + super.getDescription() + DIVIDER + getSubTaskIDs() + start
-                + DIVIDER + super.getDuration() + DIVIDER + end;
+        return super.toString()+DIVIDER+getSubTaskIDs();
     }
 
     @Override
