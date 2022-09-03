@@ -5,38 +5,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static task.TaskStatus.*;
+import static task.TaskType.*;
+
 public class Epic extends Task {
 
-    private List<SubTask> subTasks = new ArrayList<>();
-    private List<Integer> subTaskIDs = new ArrayList<>();
+    private final List<SubTask> subTasks = new ArrayList<>();
     private LocalDateTime endTime;
 
     public Epic(String name, String description) {
         super(name, description);
-        super.setType(TaskType.EPIC);
-        super.setStatus(TaskStatus.NEW);
+        super.setType(EPIC);
+        super.setStatus(NEW);
     }
-
-    public List<SubTask> getSubTasks() {
-        return subTasks;
-    }
-
-    public void setSubTasks(List<SubTask> subTasks) {
-        this.subTasks = subTasks;
-    }
-
-    public void setSubTaskID (SubTask subTask){
-        subTaskIDs.add(subTask.getId());
-    }
-
-    public List<Integer> getSubTaskIDs() {
-        return subTaskIDs;
-    }
-
-    public void removeSubTaskID(int subTaskId){
-        subTaskIDs.remove(subTaskId);
-    }
-
 
     // Вычисляет время начала Эпика как время старта подзадачи, начинающейся раньше всех.
     public void calculateStartTime() {
@@ -83,7 +64,17 @@ public class Epic extends Task {
 
     @Override
     public String toString() {
-        return super.toString()+DIVIDER+getSubTaskIDs();
+        String start = "Start time not defined";
+        String end = "End time cannot be calculated";
+        if (getStartTime() != null) {
+            start = getStartTime().format(FORMATTER);
+        }
+        if (getEndTime() != null) {
+            end = getEndTime().format(FORMATTER);
+        }
+        return super.getId() + DIVIDER + super.getType() + DIVIDER + super.getName() + DIVIDER
+                + super.getStatus() + DIVIDER + super.getDescription() + DIVIDER + start
+                + DIVIDER + super.getDuration() + DIVIDER + end;
     }
 
     @Override
@@ -98,6 +89,10 @@ public class Epic extends Task {
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), subTasks);
+    }
+
+    public List<SubTask> getSubTasks() {
+        return subTasks;
     }
 
     @Override

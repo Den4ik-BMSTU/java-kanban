@@ -80,10 +80,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     // Создание новой задачи
     @Override
-    public int addTask(Task task) {//твоё замечание понял, но как это быстро поправить не разобрался, пока сдаю без этого,
-        // если разберусь, то обновлю, я перед собой ставил задачу чтобы всё работало, знаю что код не идеальный,
-        // но в теории кроме Equals ничего не давали, на данный момент тесты все работают, с точки зрения задания всё работает,
-        // а код поправлю потихоньку
+    public int addTask(Task task) {
         try {
             validateNotNull(task);
             validateTimes(task);
@@ -128,8 +125,8 @@ public class InMemoryTaskManager implements TaskManager {
         prioritizedTasks.add(subTask);
         int epicId = subTask.getEpicId();
         Epic epic = epics.get(epicId);
-        List<SubTask> subTasks = epic.getSubTasks();
-        subTasks.add(subTask);
+        List<SubTask> subTasksNew = epic.getSubTasks();
+        subTasksNew.add(subTask);
         setEpicStatus(epic);
         setEpicTimes(epic);
         return id;
@@ -340,22 +337,6 @@ public class InMemoryTaskManager implements TaskManager {
             epic.setStatus(TaskStatus.IN_PROGRESS);
         }
     }
-    //почему данный код не выдаёт правильное значение?
-        /*ArrayList<SubTask> subTasksUpd = new ArrayList<>();
-        for (int i = 0; i < epic.getSubTaskIDs().size(); i++) {
-            subTasksUpd.add(subTasks.get(epic.getSubTaskIDs().get(i)));
-        }
-        boolean isAllSubtaskNew = subTasksUpd.stream().allMatch(subtask -> subtask.getStatus().equals("NEW"));
-        boolean isAllSubtaskDONE = subTasksUpd.stream().allMatch(subtask -> subtask.getStatus().equals("DONE"));
-
-        if (isAllSubtaskNew){
-            epic.setStatus(TaskStatus.NEW);
-        } else if (isAllSubtaskDONE){
-            epic.setStatus(TaskStatus.DONE);
-        } else {
-            epic.setStatus(TaskStatus.IN_PROGRESS);
-        }
-    }*/
 
     // Вспомогательный метод, вычисляющий продолжительность, время начала и окончания Эпика.
     protected void setEpicTimes(Epic epic) {

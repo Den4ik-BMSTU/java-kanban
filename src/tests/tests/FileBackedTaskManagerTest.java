@@ -6,7 +6,7 @@ import task_manager.FileBackedTaskManager;
 
 import java.io.File;
 
-public class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskManager> {
+public class FileBackedTaskManagerTest extends tests.TaskManagerTest<FileBackedTaskManager> {
 
     @Override
     public FileBackedTaskManager createManager() {

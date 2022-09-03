@@ -4,7 +4,7 @@ import task.Task;
 
 import java.util.List;
 
-public interface HistoryManager {//история просмотров
+public interface HistoryManager {
 
     // Добавление задачи в историю просмотров
     void add(Task task);

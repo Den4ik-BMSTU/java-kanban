@@ -1,8 +1,14 @@
+import server.*;
+
+import java.io.IOException;
 
 public class Main {
 
-    public static void main(String[] args) {
-        System.out.println("Поехали!");
+    //Привет, отправляю на проверку, улучшения пока что не делал, пока что только ТЗ сделал
+
+
+    public static void main(String[] args) throws IOException {
+        new KVServer().start();
+        new HttpTaskServer().start();
     }
 }
-/*Привет!*/
