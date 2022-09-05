@@ -11,6 +11,7 @@ import static task.TaskType.*;
 public class Epic extends Task {
 
     private final List<SubTask> subTasks = new ArrayList<>();
+    private List<Integer> subTaskIDs = new ArrayList<>();
     private LocalDateTime endTime;
 
     public Epic(String name, String description) {
@@ -62,19 +63,22 @@ public class Epic extends Task {
         endTime = epicEnd;
     }
 
+    public void setSubTaskID (SubTask subTask){
+        subTaskIDs.add(subTask.getId());
+    }
+
+    public List<Integer> getSubTaskIDs() {
+        return subTaskIDs;
+    }
+
+    public void removeSubTaskID(int subTaskId){
+        subTaskIDs.remove(subTaskId);
+    }
+
+
     @Override
     public String toString() {
-        String start = "Start time not defined";
-        String end = "End time cannot be calculated";
-        if (getStartTime() != null) {
-            start = getStartTime().format(FORMATTER);
-        }
-        if (getEndTime() != null) {
-            end = getEndTime().format(FORMATTER);
-        }
-        return super.getId() + DIVIDER + super.getType() + DIVIDER + super.getName() + DIVIDER
-                + super.getStatus() + DIVIDER + super.getDescription() + DIVIDER + start
-                + DIVIDER + super.getDuration() + DIVIDER + end;
+        return super.toString()+subTaskIDs;
     }
 
     @Override

@@ -75,318 +75,48 @@ public class HttpTaskServer {
         String method = exchange.getRequestMethod();
         String response;
         switch (method) {
-            case "GET" -> {
-                response = handleTaskGet(exchange);
-                sendText(exchange, response);
-                exchange.close();
-            }
-            case "POST" -> {
-                response = handleTaskPost(exchange);
-                sendText(exchange, response);
-                exchange.close();
-            }
-            case "DELETE" -> {
-                response = handleTaskDelete(exchange);
-                sendText(exchange, response);
-                exchange.close();
-            }
+            case "GET" ->
+                response = handleGet(exchange, "Task");
+            case "POST" ->
+                response = handlePost(exchange, "Task");
+            case "DELETE" ->
+                response = handleDelete(exchange, "Task");
+            default -> response="";
         }
+        sendText(exchange, response);
+        exchange.close();
     }
 
     private void handleSubTask(HttpExchange exchange) throws IOException {
         String method = exchange.getRequestMethod();
         String response;
         switch (method) {
-            case "GET" -> {
-                response = handleSubTaskGet(exchange);
-                sendText(exchange, response);
-                exchange.close();
-            }
-            case "POST" -> {
-                response = handleSubTaskPost(exchange);
-                sendText(exchange, response);
-                exchange.close();
-            }
-            case "DELETE" -> {
-                response = handleSubTaskDelete(exchange);
-                sendText(exchange, response);
-                exchange.close();
-            }
+            case "GET" ->
+                response = handleGet(exchange, "SubTask");
+            case "POST" ->
+                response = handlePost(exchange, "SubTask");
+            case "DELETE" ->
+                response = handleDelete(exchange, "SubTask");
+            default -> response="";
         }
+        sendText(exchange, response);
+        exchange.close();
     }
 
     private void handleEpic(HttpExchange exchange) throws IOException {
         String method = exchange.getRequestMethod();
         String response;
         switch (method) {
-            case "GET" -> {
-                response = handleEpicGet(exchange);
-                sendText(exchange, response);
-                exchange.close();
-            }
-            case "POST" -> {
-                response = handleEpicPost(exchange);
-                sendText(exchange, response);
-                exchange.close();
-            }
-            case "DELETE" -> {
-                response = handleEpicDelete(exchange);
-                sendText(exchange, response);
-                exchange.close();
-            }
+            case "GET" ->
+                    response = handleGet(exchange, "Epic");
+            case "POST" ->
+                response = handlePost(exchange, "Epic");
+            case "DELETE" ->
+                response = handleDelete(exchange, "Epic");
+            default -> response="";
         }
-    }
-
-    private String handleTaskDelete(HttpExchange h) throws IOException {
-        String param = h.getRequestURI().getQuery();
-        String response;
-        int id = 0;
-        if (param != null) {
-            id = Integer.parseInt(param.split("=")[1]);
-        }
-        if (param == null) {
-            manager.deleteAllTasks();
-            h.sendResponseHeaders(200, 0);
-            response = "Все задачи удалены!";
-        } else {
-            Task removedTask = manager.removeTask(id);
-            if (removedTask == null) {
-                h.sendResponseHeaders(404, 0);
-                response = "Задача не найдена";
-            } else {
-                h.sendResponseHeaders(200, 0);
-                response = "Задача " + id + " удалена!";
-            }
-        }
-        return response;
-    }
-
-    private String handleTaskPost(HttpExchange h) throws IOException {
-        String param = h.getRequestURI().getQuery();
-        String response;
-        int id = 0;
-        if (param != null) {
-            id = Integer.parseInt(param.split("=")[1]);
-        }
-        String body = readText(h);
-        if (body.isBlank()) {
-            h.sendResponseHeaders(404, 0);
-            response = "В теле запроса необходимо передать Task в формате JSON";
-        } else {
-            Task task = GSON.fromJson(body, Task.class);
-            if (param == null) {
-                int result = manager.addTask(task);
-                if (result < 0) {
-                    h.sendResponseHeaders(400, 0);
-                    response = "Не удалось добавить задачу!";
-                } else {
-                    h.sendResponseHeaders(201, 0);
-                    response = "Задача успешно добавлена!";
-                }
-            } else {
-                task.setId(id);
-                int result = manager.updateTask(task);
-                if (result < 0) {
-                    h.sendResponseHeaders(400, 0);
-                    response = "Не удалось обновить задачу!";
-                } else {
-                    h.sendResponseHeaders(201, 0);
-                    response = "Задача " + id + " успешно обновлена!";
-                }
-            }
-        }
-        return response;
-    }
-
-    private String handleTaskGet(HttpExchange h) throws IOException {
-        String param = h.getRequestURI().getQuery();
-        String response;
-        int id = 0;
-        if (param != null) {
-            id = Integer.parseInt(param.split("=")[1]);
-        }
-        if (param == null) {
-            response = GSON.toJson(manager.getAllTasks());
-            h.sendResponseHeaders(200, 0);
-        } else {
-            Task task = manager.getTask(id);
-            if (task == null) {
-                h.sendResponseHeaders(404, 0);
-                response = "Задача не найдена";
-            } else {
-                response = GSON.toJson(task);
-                h.sendResponseHeaders(200, 0);
-            }
-        }
-        return response;
-    }
-
-    private String handleSubTaskDelete(HttpExchange h) throws IOException {
-        String param = h.getRequestURI().getQuery();
-        String response;
-        int id = 0;
-        if (param != null) {
-            id = Integer.parseInt(param.split("=")[1]);
-        }
-        if (param == null) {
-            manager.deleteAllSubTasks();
-            h.sendResponseHeaders(200, 0);
-            response = "Все подзадачи удалены!";
-        } else {
-            Task removedTask = manager.removeSubTask(id);
-            if (removedTask == null) {
-                h.sendResponseHeaders(404, 0);
-                response = "Подзадача не найдена";
-            } else {
-                h.sendResponseHeaders(200, 0);
-                response = "Подзадача " + id + " удалена!";
-            }
-        }
-        return response;
-    }
-
-    private String handleSubTaskPost(HttpExchange h) throws IOException {
-        String param = h.getRequestURI().getQuery();
-        String response;
-        int id = 0;
-        if (param != null) {
-            id = Integer.parseInt(param.split("=")[1]);
-        }
-        String body = readText(h);
-        if (body.isBlank()) {
-            h.sendResponseHeaders(404, 0);
-            response = "В теле запроса необходимо передать SubTask в формате JSON";
-        } else {
-            SubTask task = GSON.fromJson(body, SubTask.class);
-            if (param == null) {
-                int result = manager.addSubTask(task);
-                if (result < 0) {
-                    h.sendResponseHeaders(400, 0);
-                    response = "Не удалось добавить подзадачу!";
-                } else {
-                    h.sendResponseHeaders(201, 0);
-                    response = "Подзадача успешно добавлена!";
-                }
-            } else {
-                task.setId(id);
-                int result = manager.updateSubTask(task);
-                if (result < 0) {
-                    h.sendResponseHeaders(400, 0);
-                    response = "Не удалось обновить подзадачу!";
-                } else {
-                    h.sendResponseHeaders(201, 0);
-                    response = "Подзадача " + id + " успешно обновлена!";
-                }
-            }
-        }
-        return response;
-    }
-
-    private String handleSubTaskGet(HttpExchange h) throws IOException {
-        String param = h.getRequestURI().getQuery();
-        String response;
-        int id = 0;
-        if (param != null) {
-            id = Integer.parseInt(param.split("=")[1]);
-        }
-        if (param == null) {
-            response = GSON.toJson(manager.getAllSubTasks());
-            h.sendResponseHeaders(200, 0);
-        } else {
-            Task task = manager.getSubTask(id);
-            if (task == null) {
-                h.sendResponseHeaders(404, 0);
-                response = "Подзадача не найдена";
-            } else {
-                response = GSON.toJson(task);
-                h.sendResponseHeaders(200, 0);
-            }
-        }
-        return response;
-    }
-
-    private String handleEpicDelete(HttpExchange h) throws IOException {
-        String param = h.getRequestURI().getQuery();
-        String response;
-        int id = 0;
-        if (param != null) {
-            id = Integer.parseInt(param.split("=")[1]);
-        }
-        if (param == null) {
-            manager.deleteAllEpics();
-            h.sendResponseHeaders(200, 0);
-            response = "Все эпики удалены!";
-        } else {
-            Task removedTask = manager.removeEpic(id);
-            if (removedTask == null) {
-                h.sendResponseHeaders(404, 0);
-                response = "Эпик не найден";
-            } else {
-                h.sendResponseHeaders(200, 0);
-                response = "Эпик " + id + " удален!";
-            }
-        }
-        return response;
-    }
-
-    private String handleEpicPost(HttpExchange h) throws IOException {
-        String param = h.getRequestURI().getQuery();
-        String response;
-        int id = 0;
-        if (param != null) {
-            id = Integer.parseInt(param.split("=")[1]);
-        }
-        String body = readText(h);
-        if (body.isBlank()) {
-            h.sendResponseHeaders(404, 0);
-            response = "В теле запроса необходимо передать Epic в формате JSON";
-        } else {
-            Epic task = GSON.fromJson(body, Epic.class);
-            if (param == null) {
-                int result = manager.addEpic(task);
-                if (result < 0) {
-                    h.sendResponseHeaders(400, 0);
-                    response = "Не удалось добавить эпик!";
-                } else {
-                    h.sendResponseHeaders(201, 0);
-                    response = "Эпик успешно добавлен!";
-                }
-            } else {
-                task.setId(id);
-                int result = manager.updateEpic(task);
-                if (result < 0) {
-                    h.sendResponseHeaders(400, 0);
-                    response = "Не удалось обновить эпик!";
-                } else {
-                    h.sendResponseHeaders(201, 0);
-                    response = "Эпик " + id + " успешно обновлен!";
-                }
-            }
-        }
-        return response;
-    }
-
-    private String handleEpicGet(HttpExchange h) throws IOException {
-        String param = h.getRequestURI().getQuery();
-        String response;
-        int id = 0;
-        if (param != null) {
-            id = Integer.parseInt(param.split("=")[1]);
-        }
-        if (param == null) {
-            response = GSON.toJson(manager.getAllEpics());
-            h.sendResponseHeaders(200, 0);
-        } else {
-            Task task = manager.getEpic(id);
-            if (task == null) {
-                h.sendResponseHeaders(404, 0);
-                response = "Эпик не найден";
-            } else {
-                response = GSON.toJson(task);
-                h.sendResponseHeaders(200, 0);
-            }
-        }
-        return response;
+        sendText(exchange, response);
+        exchange.close();
     }
 
     public void start() {
@@ -407,5 +137,128 @@ public class HttpTaskServer {
 
     private String readText(HttpExchange h) throws IOException {
         return new String(h.getRequestBody().readAllBytes(), UTF_8);
+    }
+
+    private String handleDelete(HttpExchange h, String tasks) throws IOException {
+        String param = h.getRequestURI().getQuery();
+        String response;
+        int id = 0;
+        if (param != null) {
+            id = Integer.parseInt(param.split("=")[1]);
+        }
+        if (param == null) {
+            switch (tasks){
+                case "Task"->manager.deleteAllTasks();
+                case "SubTask"->manager.deleteAllSubTasks();
+                case "Epic"->manager.deleteAllEpics();
+            }
+            h.sendResponseHeaders(200, 0);
+            response = "Все "+tasks+" удалены!";
+        } else {
+            Task removedTask=null;
+            switch (tasks){
+                case "Task"-> removedTask = manager.removeTask(id);
+                case "SubTask"->removedTask = manager.removeSubTask(id);
+                case "Epic"->removedTask = manager.removeEpic(id);
+            }
+
+            if (removedTask == null) {
+                h.sendResponseHeaders(404, 0);
+                response = tasks+" не найдена";
+            } else {
+                h.sendResponseHeaders(200, 0);
+                response = tasks + id + " удалена!";
+            }
+        }
+        return response;
+    }
+
+    private String handlePost(HttpExchange h, String tasks) throws IOException {
+        String param = h.getRequestURI().getQuery();
+        String response;
+        int id = 0;
+        int result = -1;
+        int result1 = -1;
+        if (param != null) {
+            id = Integer.parseInt(param.split("=")[1]);
+        }
+        String body = readText(h);
+        if (body.isBlank()) {
+            h.sendResponseHeaders(404, 0);
+            response = "В теле запроса необходимо передать "+tasks+" в формате JSON";
+        } else {
+            Task task=null;
+            SubTask subTask=null;
+            Epic epic = null;
+            switch (tasks){
+                case "Task"->{task = GSON.fromJson(body, Task.class);}
+                case "SubTask"->{subTask = GSON.fromJson(body, SubTask.class);}
+                case "Epic"->{epic = GSON.fromJson(body, Epic.class);}
+            }
+
+            if (param == null) {
+                switch (tasks){
+                    case "Task"-> result = manager.addTask(task);
+                    case "SubTask"->result = manager.addSubTask(subTask);
+                    case "Epic"->result = manager.addEpic(epic);
+                }
+                if (result < 0) {
+                    h.sendResponseHeaders(400, 0);
+                    response = "Не удалось добавить "+tasks+"!";
+                } else {
+                    h.sendResponseHeaders(201, 0);
+                    response = tasks+" успешно добавлена!";
+                }
+            } else {
+                switch (tasks){
+                    case "Task"-> {result1 = manager.updateTask(task);
+                        task.setId(id);}
+                    case "SubTask"->{result1 = manager.updateSubTask(subTask);
+                        subTask.setId(id);}
+                    case "Epic"->{result1 = manager.updateEpic(epic);
+                        epic.setId(id);}
+                }
+                if (result1 < 0) {
+                    h.sendResponseHeaders(400, 0);
+                    response = "Не удалось обновить "+tasks+"!";
+                } else {
+                    h.sendResponseHeaders(201, 0);
+                    response = tasks + id + " успешно обновлена!";
+                }
+            }
+        }
+        return response;
+    }
+
+    private String handleGet(HttpExchange h, String tasks) throws IOException {
+        String param = h.getRequestURI().getQuery();
+        String response=null;
+        int id = 0;
+        if (param != null) {
+            id = Integer.parseInt(param.split("=")[1]);
+        }
+        if (param == null) {
+            switch (tasks){
+                case "Task"-> response = GSON.toJson(manager.getAllTasks());
+                case "SubTask"->response = GSON.toJson(manager.getAllSubTasks());
+                case "Epic"->response = GSON.toJson(manager.getAllEpics());
+            }
+            h.sendResponseHeaders(200, 0);
+        } else {
+            Task task = null;
+            switch (tasks){
+                case "Task"-> task = manager.getTask(id);
+                case "SubTask"->task = manager.getSubTask(id);
+                case "Epic"->task = manager.getEpic(id);
+            }
+            if (task == null) {
+                h.sendResponseHeaders(404, 0);
+                response = tasks+" не найдена";
+            } else {
+                response = GSON.toJson(task);
+                h.sendResponseHeaders(200, 0);
+            }
+        }
+        return response;
     }
 }

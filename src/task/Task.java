@@ -14,8 +14,8 @@ public class Task  {
     private int duration;
     private int id = -1;
 
-    protected final static String DIVIDER = ",";
-    protected final static DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("HH:mm - dd.MM.yyyy");
+    protected static final String DIVIDER = ",";
+    protected static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("HH:mm - dd.MM.yyyy");
 
     // Полная версия конструктора
     public Task(String name, String description, TaskStatus status, int duration, LocalDateTime startTime) {

@@ -30,17 +30,7 @@ public class SubTask extends Task {
 
     @Override
     public String toString() {
-        String start = "Время начала не определено";
-        String end = "Время окончания не может быть рассчитано";
-        if (getStartTime() != null) {
-            start = getStartTime().format(FORMATTER);
-        }
-        if (getEndTime() != null) {
-            end = getEndTime().format(FORMATTER);
-        }
-        return getId() + DIVIDER + getType() + DIVIDER + getName() + DIVIDER + getStatus()
-                + DIVIDER + getDescription() + DIVIDER + start + DIVIDER + getDuration()
-                + DIVIDER + end + DIVIDER + epicId;
+        return super.toString() + epicId;
     }
 
     @Override
