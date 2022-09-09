@@ -3,6 +3,8 @@ package tests;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import task_manager.InMemoryTaskManager;
 import task_manager.TaskManager;
 import task.Epic;
@@ -51,6 +53,16 @@ public class EpicTest {
         Assertions.assertEquals(3, epic.getSubTasks().size());
         Assertions.assertEquals(TaskStatus.NEW, epic.getStatus());
     }
+
+    /*@ParameterizedTest
+    @ValueSource(strings={"IN_PROGRESS", "DONE"})
+    void shouldBeStatusInProgress (String status){
+        task_1.setStatus(TaskStatus.status);
+        addSubtasks();
+
+        Assertions.assertEquals(3, epic.getSubTasks().size());
+        Assertions.assertEquals(TaskStatus.IN_PROGRESS, epic.getStatus());
+    }*/
 
     @Test
     public void shouldBeStatusInProgressIfOneIsInProgress() {

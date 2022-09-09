@@ -40,9 +40,9 @@ public class HttpTaskServer {
         String path = exchange.getRequestURI().getPath();
         String param = exchange.getRequestURI().getQuery();
         switch (path) {
-            case "/src/task/task" -> handleTask(exchange);
-            case "/src/task/subtask" -> handleSubTask(exchange);
-            case "/src/task/epic" -> handleEpic(exchange);
+            case "/src/task/task" -> handleTask(exchange, "Task");
+            case "/src/task/subtask" -> handleTask(exchange, "SubTask");
+            case "/src/task/epic" -> handleTask(exchange, "Epic");
             case "/src/task/subtask/epic" -> {
                 int id = Integer.parseInt(param.split("=")[1]);
                 List<SubTask> subTasks = manager.getSubTasksFromEpic(id);
@@ -71,48 +71,16 @@ public class HttpTaskServer {
         }
     }
 
-    private void handleTask(HttpExchange exchange) throws IOException {
+    private void handleTask(HttpExchange exchange, String tasks) throws IOException {
         String method = exchange.getRequestMethod();
         String response;
         switch (method) {
             case "GET" ->
-                response = handleGet(exchange, "Task");
+                response = handleGet(exchange, tasks);
             case "POST" ->
-                response = handlePost(exchange, "Task");
+                response = handlePost(exchange, tasks);
             case "DELETE" ->
-                response = handleDelete(exchange, "Task");
-            default -> response="";
-        }
-        sendText(exchange, response);
-        exchange.close();
-    }
-
-    private void handleSubTask(HttpExchange exchange) throws IOException {
-        String method = exchange.getRequestMethod();
-        String response;
-        switch (method) {
-            case "GET" ->
-                response = handleGet(exchange, "SubTask");
-            case "POST" ->
-                response = handlePost(exchange, "SubTask");
-            case "DELETE" ->
-                response = handleDelete(exchange, "SubTask");
-            default -> response="";
-        }
-        sendText(exchange, response);
-        exchange.close();
-    }
-
-    private void handleEpic(HttpExchange exchange) throws IOException {
-        String method = exchange.getRequestMethod();
-        String response;
-        switch (method) {
-            case "GET" ->
-                    response = handleGet(exchange, "Epic");
-            case "POST" ->
-                response = handlePost(exchange, "Epic");
-            case "DELETE" ->
-                response = handleDelete(exchange, "Epic");
+                response = handleDelete(exchange, tasks);
             default -> response="";
         }
         sendText(exchange, response);

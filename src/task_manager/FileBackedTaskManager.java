@@ -109,33 +109,16 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
         switch (fields[1]) {
             case "TASK" -> {
                 Task task = new Task(fields[2], fields[4]);
-                task.setStatus(TaskStatus.valueOf(fields[3]));
-                task.setId(Integer.parseInt(fields[0]));
-                if (fields[5].equals("Start time not defined")) {
-                    task.setStartTime(null);
-                } else {
-                    task.setStartTime(LocalDateTime.parse(fields[5], FORMATTER));
-                }
-                task.setDuration(Integer.parseInt(fields[6]));
-                return task;
+                return helpString(task, fields[3], fields[0], fields[5], fields[6]);
+
             }
             case "EPIC" -> {
                 Task epic = new Epic(fields[2], fields[4]);
-                epic.setStatus(TaskStatus.valueOf(fields[3]));
-                epic.setId(Integer.parseInt(fields[0]));
-                return epic;
+                return helpString(epic, fields[3], fields[0], fields[5], fields[6]);
             }
             case "SUBTASK" -> {
                 Task subtask = new SubTask(fields[2], fields[4], Integer.parseInt(fields[8]));
-                subtask.setStatus(TaskStatus.valueOf(fields[3]));
-                subtask.setId(Integer.parseInt(fields[0]));
-                if (fields[5].equals("Start time not defined")) {
-                    subtask.setStartTime(null);
-                } else {
-                    subtask.setStartTime(LocalDateTime.parse(fields[5], FORMATTER));
-                }
-                subtask.setDuration(Integer.parseInt(fields[6]));
-                return subtask;
+                return helpString(subtask, fields[3], fields[0], fields[5], fields[6]);
             }
         }
         return null;
@@ -159,6 +142,18 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
             history.add(Integer.parseInt(str));
         }
         return history;
+    }
+
+    private static Task helpString (Task task, String status, String id, String time, String duration) {
+        task.setStatus(TaskStatus.valueOf(status));
+        task.setId(Integer.parseInt(id));
+        if (time.equals("Start time not defined")) {
+            task.setStartTime(null);
+        } else {
+            task.setStartTime(LocalDateTime.parse(time, FORMATTER));
+        }
+        task.setDuration(Integer.parseInt(duration));
+        return task;
     }
 
     // Удаление всех задач
