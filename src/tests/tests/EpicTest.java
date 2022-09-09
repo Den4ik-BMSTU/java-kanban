@@ -54,9 +54,9 @@ public class EpicTest {
         Assertions.assertEquals(TaskStatus.NEW, epic.getStatus());
     }
 
-    /*@ParameterizedTest
-    @ValueSource(strings={"IN_PROGRESS", "DONE"})
-    void shouldBeStatusInProgress (String status){
+    /*@ParameterizedTest //так что-то не так делаю, параметризированный тест не получается
+    @ValueSource(strings = {"IN_PROGRESS", "DONE"})
+    void shouldBeStatusInProgress (TaskStatus status){
         task_1.setStatus(TaskStatus.status);
         addSubtasks();
 
